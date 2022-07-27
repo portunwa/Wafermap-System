@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="author" content="Lutz Tautenhahn">
+<META NAME="description" content="include bar code type code39 in html files with javascript">
+<META NAME="keywords" content="code39, javascript">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<TITLE>JavaScript Code39</TITLE>
+<script language="JavaScript" src="code39.js"></script>
+</HEAD>
+<BODY style="font-family:Verdana; font-size:11pt">
+<H3>JavaScript Code39</H3> 
+Include <b>&lt;script language="JavaScript" src="code39.js"&gt;&lt;/script&gt;</b><br>
+in your html file, then you can use the function<br>
+<b>Code39(theX, theY, theBarHeight, theFontHeight, theBarCodeText[, theBarCodeSize])</b><br>
+to display barcodes of type Code39 in a web page.<br>
+The Parameter theBarCodeSize can be 1 (width ratio 1:2), 2 (width ratio 2:5)<br>
+or 3 (width ratio 3:7), or any larger integer number. The default value is 1.<br><br>
+<script language="JavaScript">
+document.open();
+document.write('<table border cellpadding=8><tr><td>The 1st barcode is displayed at the current position in the text:<br><b>Code39("","",60,8,"BAR CODE");</b></td><td>');
+Code39("","",60,8,"BAR CODE");
+document.write('</td></tr></table><br>');
+document.write('The 2nd barcode is displayed at the absolute position (200,340):<br><b>Code39(200,340,80,12,"THIS IS CODE 39",2);</b>');
+Code39(200,340,80,12,"THIS IS CODE 39",2);
+document.close();
+</script>
+<br><br><br><br><br><br><br><br>
+<a href="code39.zip" target=_blank>download code39.zip</a><br>
+<small>This goodie was brought to you by</small> <b><a href="http://www.lutanho.net" target="_blank">Lutz Tautenhahn</a></b></small>
+</BODY>
+</HTML>

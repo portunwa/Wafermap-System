@@ -1,0 +1,19 @@
+﻿@page
+@model WaferMap.Pages.PreviewMapModel
+@{
+    ViewData["Title"] = "Previewing Map Detail";
+}
+<div>
+
+    @{
+        if (Model.WaferMapContent != null && Model.WaferMapContent.rawMapData != null)
+        {
+            foreach (var item in Model.WaferMapContent.rawMapData)
+            {
+                <pre style="display:block; font-family:monospace; white-space:pre;"> @item</pre>
+                <br />
+            }   
+        }
+    }
+
+</div>

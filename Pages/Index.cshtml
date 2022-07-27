@@ -1,0 +1,54 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4 text-success"><b>DASHBOARD</b></h1>
+    <p class="text-success">Infineon Technologies | Wafer Map System</p>
+    <div class="d-flex pt-3 jusitfy-content-center"> 
+        <div class="col">
+            <a href="searchByLot" class="text-decoration-none text-black">
+                <img class="mb-3" src="ICONS/SearchByLot.png" alt="SearchByLot" width="220" height="300"/>
+                <br />
+                Search by Wafer Lot#
+            </a>
+        </div>
+        <div class="col">
+            <a href="searchByID" class="text-decoration-none text-black">
+                <img class="mb-3" src="ICONS/SearchByID.png" alt="SearchByID" width="220" height="300"/>
+                <br />
+                Search by Wafer ID
+            </a>
+        </div>
+        <div class="col">
+            <a href="validateGoodDies" class="text-decoration-none text-black">
+                <img class="mb-3" src="ICONS/Validation.png" alt="validateGoodDies" width="220" height="300"/>
+                <br />
+                Validate the good dies quantity
+            </a>
+        </div>
+        <div class="col">
+            <a href="validateMapfiles?SupCode=F25" class="text-decoration-none text-black">
+                <img class="mb-3" src="ICONS/Valid From Supplier.png" alt="validateMafiles" width="220" height="300"/>
+                <br />
+                Validate the mapfile from supplier
+            </a>
+        </div>
+        <div class="col">
+            <a href="archive" class="text-decoration-none text-black">
+                <img class="mb-3" src="ICONS/Archive.png" alt="archive" width="220" height="300"/>
+                <br />
+                Archive
+            </a>
+        </div>
+        <div class="col">
+            <a href="transfer" class="text-decoration-none text-black">
+                <img class="mb-3" src="ICONS/Transfer.png" alt="transfer" width="220" height="300"/>
+                <br />
+                Mapfile transfer               
+            </a>
+        </div>
+    </div>
+</div>

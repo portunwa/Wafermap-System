@@ -1,0 +1,64 @@
+﻿@page
+@model WaferMap.Pages.archiveModel
+@{
+    ViewData["Title"] = "Archive Page";
+}
+
+<form>
+    <div class="text-center pb-3">
+        <h1 class="display-4">Get Archive Wafermap</h1>
+        <div class="form-group pt-4">
+            <div class="input-group">
+                <input asp-for="WaferLotID" type="search" class="form-control" placeholder="Enter Wafer Lot#" width="200" required/>
+                <button type="submit" class=" btn btn-primary">Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@{
+    if (Model.WaferLotID != null)
+    {
+          <div class="jumbotron jumbotron-fluid pt-3">
+              <div class="container">
+                <h3>Search Result: @Model.WaferLotID</h3>
+                <hr class="my-4">
+                <p>ARCHIVE MAPFILE OF LOT# @Model.WaferLotID</p>
+              </div>
+          </div>
+    }
+}
+
+@{
+    if (Model.WaferIDListDB != null)
+    {
+          <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Wafer</th>
+              <th scope="col">Archive Date</th>
+              <th scope="col">Wafer Scribe ID</th>
+              <th scope="col">Operation</th>
+            </tr>
+          </thead>
+          <tbody>
+                @{
+                    int number = 1;
+                    foreach (var waferlist in Model.WaferIDListDB)
+                    { 
+                        <tr>
+                          <th scope="row">@number</th>
+                          <td> @{if(@Model.WaferIDListDB != null)@waferlist[1]} </td>
+                          <td> @{if(@Model.WaferIDListDB != null)@waferlist[0]} </td>
+                          <td><a href="previewMap/?scribeID=@{if(@Model.WaferIDListDB != null)@waferlist[0]}&archive=@{if(@Model.pathLocation != null)@Model.pathLocation}">Preview</a></td>
+                        </tr>
+                        number++;
+                    }
+                }
+            
+            <!-- Fetch the data and get API to tr tags to display the wafer in wafer map -->
+          </tbody>
+        </table>
+         
+    }
+}

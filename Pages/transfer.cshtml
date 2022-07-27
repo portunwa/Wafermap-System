@@ -1,0 +1,108 @@
+﻿@page
+@model WaferMap.Pages.transferModel
+@{
+    ViewData["Title"] = "Transfer Page";
+}
+
+
+@section Scripts 
+{
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+
+        function getCurrentDest()
+        {
+            var destination = $("select.destination").children("option:selected").val();
+            alert("Successful, This Wafer Lot is in queue waiting to transfer");
+            @Model.TransferCsv();
+            
+            return;
+        }
+
+
+    </script>
+}
+
+<form>
+    <div class="text-center pb-3">
+        <h1 class="display-4">Transfer to cdalert</h1>
+        <div class="form-group pt-4">
+            <div class="input-group">
+                <input asp-for="WaferLotID" type="search" class="form-control" placeholder="Enter Wafer Lot Number to transfer" width="200" />
+                <button type="submit" class=" btn btn-primary">Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@{
+    if (Model.WaferLotID != null)
+    {
+          <div class="jumbotron jumbotron-fluid pt-3">
+          <div class="container">
+            <h3>Search Result: @Model.WaferLotID</h3>
+            <hr class="my-4">
+          </div>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Foundry Lot</th>
+              <th scope="col">Created Date</th>
+              <th scope="col">Created Time</th>
+              <th scope="col">Sort</th>
+              <th scope="col">Location</th>
+              <th scope="col">Device</th>
+              <th scope="col">Wafer Qty.</th>
+              <th scope="col">Good Die Qty.</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @{
+                 if (Model.WaferListInfo != null)
+                 {
+                        <tr>
+                          <th scope="row">@Model.WaferListInfo[0]</th>
+                          <td>@Model.WaferListInfo[1]</td>
+                          <td>@Model.WaferListInfo[2]</td>
+                          <td>@Model.WaferListInfo[3]</td>
+                          <td>@Model.WaferListInfo[4]</td>
+                          <td>@Model.WaferListInfo[5]</td>
+                          <td>@Model.WaferListInfo[6]</td>
+                          <td>@Model.WaferListInfo[7]</td>
+                          <td>@Model.WaferListInfo[8]</td>
+                        </tr>
+                 }
+            }
+          </tbody>
+        </table>
+        <br />
+
+        <form>
+        <div class="d-flex">
+            <p class="mx-3">Transfer To: </p> 
+            <div class="mx-3">
+                <input asp-for="WaferLotID" type="hidden" id="waferLotSearch" />
+                <select class="form-select destination" aria-label="selectSupplier" asp-for="selectedSupplier">
+                  <option selected>Select Transfer Destination</option>
+                    @{
+                        foreach (var supplier in Model.GetSupplierNames())
+                        {
+                            <option value=@supplier[0]>@supplier[0]</option>
+                        }
+                    }
+                </select>
+            </div>
+            <button onclick="getCurrentDest()" type="submit" class="btn btn-primary">Transfer</button>
+        </div>
+        </form>
+        
+    }
+}
+

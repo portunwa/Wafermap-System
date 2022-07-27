@@ -1,0 +1,58 @@
+﻿@page
+@model WaferMap.Pages.searchByIDModel
+@{
+    ViewData["Title"] = "Search by ID";
+}
+
+<form>
+    <div class="text-center pb-3">
+        <h1 class="display-4">Search by Wafer Scribe ID</h1>
+        <div class="form-group pt-4">
+            <div class="input-group">
+                <input asp-for="WaferScribeID" type="search" class="form-control" placeholder="Enter Wafer Scribe ID" width="200" required/>
+                <button type="submit" class=" btn btn-primary">Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@{
+    if (Model.WaferScribeID != null)
+    {
+          <div class="jumbotron jumbotron-fluid pt-3">
+              <div class="container">
+                <h3>Search Result: @Model.WaferScribeID</h3>
+                <hr class="my-4">
+                <p>DISPLAY THE INFORMATION IN MAPFILE</p>
+              </div>
+          </div>
+    }
+}
+
+@{
+    if (Model.WaferMapItem != null)
+    {
+          <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Wafer</th>
+              <th scope="col">Date</th>
+              <th scope="col">Wafer Scribe ID</th>
+              <th scope="col">Operation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+       
+              <th scope="row">1</th>
+              <td>@{if(@Model.WaferMapItem != null)@Model.WaferDate}</td>
+              <td> @{if(@Model.WaferMapItem != null)@Model.WaferMapItem.waferScribeID}</td>
+              <td><a href="previewMap/?scribeID=@{if(@Model.WaferMapItem != null)@Model.WaferMapItem.waferScribeID}">Preview</a>  <a href="archive">Archive</a></td>
+            </tr>
+            <!-- Fetch the data and get API to tr tags to display the wafer in wafer map -->
+          </tbody>
+        </table>
+         
+    }
+}
+

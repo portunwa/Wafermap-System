@@ -1,0 +1,113 @@
+﻿@page
+@model WaferMap.Pages.SearchByLotModel
+@{
+    ViewData["Title"] = "Search by Lot#";
+}
+
+@section Scripts 
+{
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#waferLotSearch').autocomplete({
+                source: '@Url.Page("searchByLot", "search")',
+                minLength: 4
+            });
+        });
+    </script>
+}
+
+<form method="post">
+    <div class="text-center pb-3">
+        <h1 class="display-4">Search by WaferLot No.</h1>
+        <div class="form-group pt-4">
+            <div class="input-group">
+                <input asp-for="WaferLotID" id="waferLotSearch" type="search" class="form-control" placeholder="Enter Wafer Lot Number" width="200" required/>
+                <button type="submit" class=" btn btn-primary">Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@{
+    if (Model.WaferLotID != null)
+    {
+        <h3 class="pt-3">Search Result: @Model.WaferLotID</h3>
+        <hr class="my-4">
+        <div class ="d-flex">
+            <div class="d-flex flex-column flex-shrink-0 p-3 bg-light my-3 overflow-auto" style="width: 280px; max-height: 400px;">
+                <h5>Result | Lists of Wafer Lot</h5>
+                  <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                  @{
+                      foreach (var records in Model.WaferRecord)
+                      {
+                            <a class="nav-link link-dark" data-toggle="pill" href="#tab-@records[0]" role="tab" aria-controls="tab-@records[0]" aria-selected="false">
+                              @records[0]
+                            </a>     
+                      }
+                  }
+                  </div>
+               
+            </div>
+
+            <div class="ps-lg-2 tab-content"  style="width:100%" id="v-pills-tabContent">
+            @{
+                foreach (var records in Model.WaferRecord)
+                {
+                    <div class="tab-pane fade" id="tab-@records[0]" role="tabpanel" aria-labelledby="tab-@records[0]" >
+                    <div class="jumbotron jumbotron-fluid pt-3">
+                      <div class="container">
+                        <p><b>Wafer Lot No</b>: @records[0] | <b>Created Time</b>: @records[1], @records[2]</p>
+                        <p><b>Supplier</b>: @records[3],  <b>Destination</b>: @records[4]</p>
+                        <p><b>Product Name</b>: @records[5], <b>Total Wafer</b>: @records[6], <b>Total Good Dies</b>: @records[7]</p>
+                      </div>
+                    </div>
+
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Wafer Lot</th>
+                          <th scope="col">Process Date</th>
+                          <th scope="col">Process Time</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">State</th>
+                          <th scope="col">Remark</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Fetch the data and get API to tr tags to display the wafer in wafer map -->
+
+                            @{
+                                foreach(var transactions in Model.WaferTransaction)
+                                {
+                                    if (transactions[0] == records[0])
+                                    {
+                                        <tr>
+                                          <th scope="row">@transactions[0]</th>
+                                          <td>@transactions[1]</td>
+                                          <td>@transactions[2]</td>
+                                          <td>@transactions[3]</td> 
+                                          <td>@transactions[4]</td> 
+                                          <td>@transactions[5]</td> 
+                                        </tr>
+                                    }
+                                }
+                            }
+                      </tbody>
+                    </table>
+                    <br />
+                    <!-- <pre style="display:block; font-family:monospace; white-space:pre; margin-left: 60px"> Model.WaferSummary</pre> -->
+                    </div>
+                }
+            }
+            </div>
+        </div> 
+    }
+}
+

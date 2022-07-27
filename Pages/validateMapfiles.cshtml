@@ -1,0 +1,109 @@
+﻿@page
+@model WaferMap.Pages.validateMapfilesModel
+@{
+    ViewData["Title"] = "Mapfile Validation";
+}
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+}
+
+<div class="d-flex">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light my-3" style="width: 280px;">
+        <h5>Supplier's server</h5>
+        <hr>
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <form method="post">
+                @{
+                    var location = new Uri($"{Request.Scheme}://{Request.Host}{Request.Path}{Request.QueryString}");
+                    var url = location.AbsoluteUri.Split("SupCode=");
+                    var currentSupplier = url[1];
+
+                    foreach (var suppliers in Model.GetSupplierNames())
+                    {
+                        if (suppliers[0] == currentSupplier)
+                        {
+                            <a asp-for="SupplierCode" href="?SupCode=@suppliers[0]" class="nav-link link-dark active">
+                                @suppliers[0] | @suppliers[1]
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-for="SupplierCode" href="?SupCode=@suppliers[0]" class="nav-link link-dark">
+                                @suppliers[0] | @suppliers[1]
+                            </a>
+                        }
+                    } 
+                }  
+          </form>
+        </div>
+    </div>
+
+    <div class="ps-lg-2"  style="width:100%">
+        <div class="jumbotron jumbotron-fluid pt-3">
+          <div class="container">
+            <h3 class= "pe-lg-2">INFORMATION</h3>  
+            <hr class="my-4">
+            <p class="text-warning">Note: If submit search during conversion LOT's status may changing, if found rawmap files please wait 6-8 hrs.</p>
+                @{
+                    if (Model.ExceptionMessage != null)
+                    {
+                    <p class="text-danger">Exception caught during process in server: @Model.SupplierCode, @Model.ExceptionMessage</p>
+                    }
+                }
+          </div>
+        </div>
+
+        @{
+            if (Model.ConnectionServerInfo != null)
+            { 
+                <p class="ps-lg-2"><b>Connection Detail</b>: [@Model.ConnectionServerInfo[0]] [@Model.ConnectionServerInfo[1]] [@Model.ConnectionServerInfo[2]] [@Model.ConnectionServerInfo[3]] [isSFTP = @Model.ConnectionServerInfo[4]]</p>
+            }
+            
+        }
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Lot#</th>
+              <th scope="col">Timestamp</th>
+              <th scope="col">Rawmap</th>
+              <th scope="col">Pre-Alert</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+
+                @{
+                    if (Model.ValidationAssetList.Count > 0){
+                        foreach (var item in Model.ValidationAssetList)
+                        {
+                            <tr>
+                                <th scope="row">@item.WaferLotID</th>
+                                @{
+                                      int result = DateTime.Compare(@item.PreAlertDate, @item.MapfileDate); 
+                                      if (result < 0) { <td>@item.MapfileDate.ToString("dd/MM/yyyy")</td> }
+                                      else if (result == 0) { <td>@item.MapfileDate.ToString("dd/MM/yyyy")</td> }
+                                      else { <td>@item.PreAlertDate.ToString("dd/MM/yyyy")</td> }
+                                }
+                                <td>@item.RawMapName</td>
+                                <td>@item.PreAlertName</td>
+                                @{
+                                    if (@item.HasPreAlert && @item.HasMapFile) { <td class="text-primary">Wait for auto conversion 6-8 Hours</td> }
+                                    else if (@item.HasPreAlert && !@item.HasMapFile) { <td class="text-danger">No Mapfile found, please request to supplier</td> }
+                                    else if (!@item.HasPreAlert && @item.HasMapFile) { <td class="text-danger">No Pre-Alert found, please request to supplier</td> }
+                                    else { <td class="text-danger">Error on Status</td> }
+                                }
+                            </tr>
+                        }
+                    }
+                }
+            
+          </tbody>
+        </table>
+    </div>
+</div>
